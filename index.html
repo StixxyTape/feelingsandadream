@@ -3,492 +3,98 @@
 <head>
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Purpose — A Game</title>
-  <link href="https://fonts.googleapis.com/css2?family=Cinzel:wght@400;600&family=Lora:ital,wght@0,400;0,500;1,400&display=swap" rel="stylesheet" />
+  <title>Feelings and a Dream</title>
+  <link href="https://fonts.googleapis.com/css2?family=Source+Serif+4:wght@300;400&display=swap" rel="stylesheet" />
   <style>
     *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
 
-    :root {
-      --bg:        #09090e;
-      --surface:   #0e0e18;
-      --border:    #1e1e2e;
-      --text:      #ddd8cc;
-      --muted:     #6a6480;
-      --accent:    #9bbf98;   /* sage — overgrown */
-      --gold:      #c9a96e;   /* warm amber — distant light */
-    }
-
-    html { scroll-behavior: smooth; }
-
     body {
-      background: var(--bg);
-      color: var(--text);
-      font-family: 'Lora', Georgia, serif;
-      min-height: 100vh;
-      overflow-x: hidden;
+      background: #fff;
+      color: #000;
+      font-family: 'Source Serif 4', Georgia, serif;
+      font-weight: 300;
+      line-height: 1.7;
     }
 
-    /* ── Grain overlay ── */
-    body::before {
-      content: '';
-      position: fixed;
-      inset: 0;
-      background-image: url("data:image/svg+xml,%3Csvg viewBox='0 0 256 256' xmlns='http://www.w3.org/2000/svg'%3E%3Cfilter id='noise'%3E%3CfeTurbulence type='fractalNoise' baseFrequency='0.9' numOctaves='4' stitchTiles='stitch'/%3E%3C/filter%3E%3Crect width='100%25' height='100%25' filter='url(%23noise)' opacity='1'/%3E%3C/svg%3E");
-      opacity: 0.03;
-      pointer-events: none;
-      z-index: 1000;
+    .container {
+      max-width: 640px;
+      margin: 0 auto;
+      padding: 4rem 2rem 6rem;
     }
 
-    /* ── Stars ── */
-    #stars {
-      position: fixed;
-      inset: 0;
-      pointer-events: none;
-      z-index: 0;
-    }
-
-    /* ── Nav ── */
-    nav {
-      position: fixed;
-      top: 0; left: 0; right: 0;
-      z-index: 100;
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      padding: 1.6rem 3rem;
-      background: linear-gradient(to bottom, rgba(9,9,14,0.95), transparent);
-    }
-
-    .nav-logo {
-      font-family: 'Cinzel', serif;
+    .site-name {
       font-size: 1rem;
-      font-weight: 600;
-      letter-spacing: 0.2em;
-      color: var(--gold);
+      letter-spacing: 0.04em;
+      margin-bottom: 3rem;
+    }
+
+    .post-list { list-style: none; }
+
+    .post-item {
+      padding: 1.8rem 0;
+      border-bottom: 1px solid #e0e0e0;
+    }
+
+    .post-item:first-child { border-top: 1px solid #e0e0e0; }
+    .post-item:hover .post-title { opacity: 0.45; }
+
+    .post-item a {
       text-decoration: none;
-      text-transform: uppercase;
-      cursor: pointer;
-    }
-
-    .nav-links {
-      display: flex;
-      gap: 2.4rem;
-      list-style: none;
-    }
-
-    .nav-links a {
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.25em;
-      text-transform: uppercase;
-      color: var(--muted);
-      text-decoration: none;
-      transition: color 0.3s;
-      cursor: pointer;
-    }
-
-    .nav-links a:hover,
-    .nav-links a.active { color: var(--text); }
-
-    /* ── Pages ── */
-    .page { display: none; min-height: 100vh; position: relative; z-index: 1; }
-    .page.visible { display: block; }
-
-    /* ── HOME ── */
-    #home {
-      display: none;
-      flex-direction: column;
-      justify-content: center;
-      align-items: center;
-      text-align: center;
-      min-height: 100vh;
-      padding: 6rem 2rem 4rem;
-    }
-    #home.visible { display: flex; }
-
-    .home-eyebrow {
-      font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1.8rem;
-      opacity: 0;
-      animation: fadeUp 1.2s ease 0.3s forwards;
-    }
-
-    .home-title {
-      font-family: 'Cinzel', serif;
-      font-size: clamp(3.5rem, 10vw, 8rem);
-      font-weight: 400;
-      letter-spacing: 0.15em;
-      color: var(--text);
-      line-height: 1;
-      margin-bottom: 2rem;
-      opacity: 0;
-      animation: fadeUp 1.4s ease 0.5s forwards;
-    }
-
-    .home-divider {
-      width: 40px;
-      height: 1px;
-      background: var(--gold);
-      margin: 0 auto 2rem;
-      opacity: 0;
-      animation: fadeUp 1s ease 0.9s forwards;
-    }
-
-    .home-tagline {
-      font-size: 1.05rem;
-      font-style: italic;
-      color: var(--muted);
-      max-width: 480px;
-      line-height: 1.8;
-      opacity: 0;
-      animation: fadeUp 1.2s ease 1.1s forwards;
-    }
-
-    .home-status {
-      margin-top: 3.5rem;
-      font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--border);
-      opacity: 0;
-      animation: fadeUp 1s ease 1.5s forwards;
-    }
-
-    .home-status span {
-      display: inline-block;
-      width: 6px; height: 6px;
-      border-radius: 50%;
-      background: var(--accent);
-      margin-right: 0.6rem;
-      vertical-align: middle;
-      animation: pulse 2.5s ease-in-out infinite;
-    }
-
-    /* ── DEVLOG ── */
-    #devlog { padding: 10rem 2rem 6rem; }
-
-    .page-header {
-      max-width: 700px;
-      margin: 0 auto 4rem;
-      border-bottom: 1px solid var(--border);
-      padding-bottom: 2rem;
-    }
-
-    .page-header h1 {
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 1rem;
-    }
-
-    .page-header p {
-      font-size: 0.95rem;
-      color: var(--muted);
-      font-style: italic;
-      line-height: 1.8;
-    }
-
-    .devlog-empty {
-      max-width: 700px;
-      margin: 0 auto;
-      padding: 4rem 0;
-      text-align: center;
-    }
-
-    .devlog-empty .empty-glyph {
-      font-family: 'Cinzel', serif;
-      font-size: 3rem;
-      color: var(--border);
-      margin-bottom: 1.5rem;
+      color: inherit;
       display: block;
     }
 
-    .devlog-empty p {
-      font-style: italic;
-      color: var(--muted);
-      font-size: 0.95rem;
-      line-height: 1.8;
-    }
-
-    /* Devlog entry (for when you add entries) */
-    .devlog-entry {
-      max-width: 700px;
-      margin: 0 auto 3.5rem;
-      padding-bottom: 3.5rem;
-      border-bottom: 1px solid var(--border);
-    }
-
-    .entry-meta {
-      display: flex;
-      align-items: center;
-      gap: 1rem;
-      margin-bottom: 1.2rem;
-    }
-
-    .entry-date {
-      font-family: 'Cinzel', serif;
-      font-size: 0.62rem;
-      letter-spacing: 0.3em;
+    .post-date {
+      font-size: 0.75rem;
+      letter-spacing: 0.06em;
       text-transform: uppercase;
-      color: var(--gold);
+      color: #999;
+      margin-bottom: 0.4rem;
     }
 
-    .entry-tag {
-      font-family: 'Cinzel', serif;
-      font-size: 0.58rem;
-      letter-spacing: 0.2em;
-      text-transform: uppercase;
-      color: var(--muted);
-      border: 1px solid var(--border);
-      padding: 0.2rem 0.6rem;
-      border-radius: 2px;
-    }
-
-    .entry-title {
-      font-family: 'Cinzel', serif;
-      font-size: 1.4rem;
+    .post-title {
+      font-size: 1.2rem;
       font-weight: 400;
-      color: var(--text);
-      margin-bottom: 1rem;
-      line-height: 1.4;
+      margin-bottom: 0.4rem;
+      transition: opacity 0.15s;
     }
 
-    .entry-body {
+    .post-excerpt {
+      font-size: 0.9rem;
+      color: #666;
+      line-height: 1.7;
+    }
+
+    .empty-state {
       font-size: 0.95rem;
-      line-height: 1.9;
-      color: #b0a99a;
-    }
-
-    .entry-body p + p { margin-top: 1em; }
-
-    .entry-images {
-      display: grid;
-      grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
-      gap: 0.8rem;
-      margin-top: 1.5rem;
-    }
-
-    .entry-images img {
-      width: 100%;
-      display: block;
-      border: 1px solid var(--border);
-      filter: brightness(0.9);
-      transition: filter 0.3s;
-    }
-
-    .entry-images img:hover { filter: brightness(1); }
-
-    /* ── ABOUT ── */
-    #about { padding: 10rem 2rem 6rem; }
-
-    .about-inner {
-      max-width: 680px;
-      margin: 0 auto;
-    }
-
-    .about-inner h2 {
-      font-family: 'Cinzel', serif;
-      font-size: 0.7rem;
-      letter-spacing: 0.4em;
-      text-transform: uppercase;
-      color: var(--accent);
-      margin-bottom: 2rem;
-    }
-
-    .about-inner .about-title {
-      font-family: 'Cinzel', serif;
-      font-size: 2.2rem;
-      font-weight: 400;
-      color: var(--text);
-      line-height: 1.3;
-      margin-bottom: 2rem;
-    }
-
-    .about-inner p {
-      font-size: 0.98rem;
-      line-height: 1.95;
-      color: #b0a99a;
-      margin-bottom: 1.4em;
-    }
-
-    .about-inner .about-dev {
-      margin-top: 4rem;
-      padding-top: 2.5rem;
-      border-top: 1px solid var(--border);
-    }
-
-    .about-inner .about-dev h3 {
-      font-family: 'Cinzel', serif;
-      font-size: 0.65rem;
-      letter-spacing: 0.35em;
-      text-transform: uppercase;
-      color: var(--gold);
-      margin-bottom: 1.2rem;
-    }
-
-    /* ── Footer ── */
-    footer {
-      position: relative;
-      z-index: 1;
-      text-align: center;
-      padding: 2.5rem;
-      font-family: 'Cinzel', serif;
-      font-size: 0.6rem;
-      letter-spacing: 0.3em;
-      text-transform: uppercase;
-      color: var(--border);
-      border-top: 1px solid var(--border);
-    }
-
-    /* ── Animations ── */
-    @keyframes fadeUp {
-      from { opacity: 0; transform: translateY(16px); }
-      to   { opacity: 1; transform: translateY(0); }
-    }
-
-    @keyframes pulse {
-      0%, 100% { opacity: 1; }
-      50%       { opacity: 0.3; }
+      color: #999;
+      padding: 2rem 0;
     }
   </style>
 </head>
 <body>
+<div class="container">
 
-<canvas id="stars"></canvas>
+  <div class="site-name">Feelings and a Dream</div>
 
-<nav>
-  <a class="nav-logo" onclick="showPage('home')">Purpose</a>
-  <ul class="nav-links">
-    <li><a onclick="showPage('home')"   id="nav-home">Home</a></li>
-    <li><a onclick="showPage('devlog')" id="nav-devlog">Devlog</a></li>
-    <li><a onclick="showPage('about')"  id="nav-about">About</a></li>
+  <ul class="post-list">
+
+    <!-- Add a new entry here each time you publish a post. Example:
+
+    <li class="post-item">
+      <a href="posts/it-begins.html">
+        <div class="post-date">March 2026</div>
+        <div class="post-title">It begins.</div>
+        <div class="post-excerpt">The first real day of work on Purpose.</div>
+      </a>
+    </li>
+
+    -->
+
   </ul>
-</nav>
 
-<!-- HOME -->
-<section class="page visible" id="home">
-  <span class="home-eyebrow">A game in development</span>
-  <h1 class="home-title">Purpose</h1>
-  <div class="home-divider"></div>
-  <p class="home-tagline">A small figure in a vast, ancient world. No quest. No map. Just the quiet act of witnessing.</p>
-  <p class="home-status"><span></span>Early development</p>
-</section>
+  <p class="empty-state">Nothing here yet.</p>
 
-<!-- DEVLOG -->
-<section class="page" id="devlog">
-  <div class="page-header">
-    <h1>Devlog</h1>
-    <p>Progress updates, screenshots, and thoughts as the game takes shape.</p>
-  </div>
-
-  <!-- EMPTY STATE (remove this and add entries below when you have content) -->
-  <div class="devlog-empty">
-    <span class="empty-glyph">✦</span>
-    <p>Nothing yet.<br>But something is coming.</p>
-  </div>
-
-  <!-- ENTRY TEMPLATE — copy and fill in when you have something to post
-  <article class="devlog-entry">
-    <div class="entry-meta">
-      <span class="entry-date">March 2026</span>
-      <span class="entry-tag">First Steps</span>
-    </div>
-    <h2 class="entry-title">It begins.</h2>
-    <div class="entry-body">
-      <p>Your entry text here. Write as much or as little as you want.</p>
-    </div>
-    <div class="entry-images">
-      <img src="screenshots/your-image.png" alt="Description" />
-    </div>
-  </article>
-  -->
-</section>
-
-<!-- ABOUT -->
-<section class="page" id="about">
-  <div class="about-inner">
-    <h2>About the Game</h2>
-    <p class="about-title">You are small.<br>The world is not.</p>
-    <p>
-      Purpose is an atmospheric exploration game about being present in a world far older and vaster than you. There are no objectives handed to you, no lore dumps, no quest markers. Only the light through ancient ruins, the sound of water somewhere below, and the gentle weight of existing somewhere beautiful.
-    </p>
-    <p>
-      It is a game about witnessing. About the feeling of standing somewhere that doesn't need you — and finding that enough.
-    </p>
-    <p>
-      Currently in early development. Built in Godot, with hand-drawn art.
-    </p>
-
-    <div class="about-dev">
-      <h3>The Developer</h3>
-      <p>
-        Made by one person — a game developer, writer, and observer. This is the most personal project yet.
-      </p>
-    </div>
-  </div>
-</section>
-
-<footer>Purpose — A game &nbsp;·&nbsp; In development</footer>
-
-<script>
-  // ── Star field ──
-  const canvas = document.getElementById('stars');
-  const ctx = canvas.getContext('2d');
-  let stars = [];
-
-  function resize() {
-    canvas.width  = window.innerWidth;
-    canvas.height = window.innerHeight;
-  }
-
-  function initStars() {
-    stars = [];
-    for (let i = 0; i < 180; i++) {
-      stars.push({
-        x: Math.random() * canvas.width,
-        y: Math.random() * canvas.height,
-        r: Math.random() * 1.1,
-        a: Math.random(),
-        speed: 0.0003 + Math.random() * 0.0004
-      });
-    }
-  }
-
-  function drawStars(t) {
-    ctx.clearRect(0, 0, canvas.width, canvas.height);
-    stars.forEach(s => {
-      const alpha = 0.2 + 0.5 * (0.5 + 0.5 * Math.sin(t * s.speed * 1000 + s.a * 100));
-      ctx.beginPath();
-      ctx.arc(s.x, s.y, s.r, 0, Math.PI * 2);
-      ctx.fillStyle = `rgba(220, 210, 195, ${alpha})`;
-      ctx.fill();
-    });
-    requestAnimationFrame(drawStars);
-  }
-
-  resize();
-  initStars();
-  requestAnimationFrame(drawStars);
-  window.addEventListener('resize', () => { resize(); initStars(); });
-
-  // ── Routing ──
-  function showPage(id) {
-    document.querySelectorAll('.page').forEach(p => p.classList.remove('visible'));
-    document.querySelectorAll('.nav-links a').forEach(a => a.classList.remove('active'));
-    document.getElementById(id).classList.add('visible');
-    document.getElementById('nav-' + id).classList.add('active');
-    window.scrollTo(0, 0);
-  }
-
-  // Set initial active nav
-  document.getElementById('nav-home').classList.add('active');
-</script>
+</div>
 </body>
 </html>
