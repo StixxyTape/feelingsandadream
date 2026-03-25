@@ -32,10 +32,10 @@ body {
 .post-list { list-style: none; }
 
 .post-item {
-  border-bottom: 1px solid #3d4a63;
+  border-bottom: 1px solid #a0a6b2;
 }
 
-.post-item:first-child { border-top: 1px solid #3d4a63; }
+.post-item:first-child { border-top: 1px solid #a0a6b2; }
 .post-item:hover .post-title { opacity: 0.45; }
 
 .post-item a {
@@ -99,7 +99,7 @@ h1 {
   line-height: 1.25;
   margin-bottom: 2.5rem;
   padding-bottom: 2rem;
-  border-bottom: 1px solid #3d4a63;
+  border-bottom: 1px solid #a0a6b2;
 }
 
 .body {
