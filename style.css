@@ -28,6 +28,22 @@ body {
 
 .site-name:hover { opacity: 0.5; }
 
+/* ── Hub ── */
+.hub-nav { display: flex; flex-direction: column; }
+
+.hub-link {
+  display: block;
+  padding: 1.8rem 0;
+  font-size: 1.2rem;
+  text-decoration: none;
+  color: inherit;
+  border-bottom: 1px solid #a0a6b2;
+  transition: opacity 0.15s;
+}
+
+.hub-link:first-child { border-top: 1px solid #a0a6b2; }
+.hub-link:hover { opacity: 0.45; }
+
 /* ── Post list ── */
 .post-list { list-style: none; }
 
@@ -106,6 +122,32 @@ h1 {
   font-size: 1rem;
   line-height: 1.9;
   color: #e2e8f4;
+}
+
+/* ── Story list ── */
+.story-list { list-style: none; }
+
+.story-item { border-bottom: 1px solid #a0a6b2; }
+.story-item:first-child { border-top: 1px solid #a0a6b2; }
+.story-item:hover .story-title { opacity: 0.45; }
+
+.story-item a {
+  text-decoration: none;
+  color: inherit;
+  padding: 1.8rem 0;
+  display: block;
+}
+
+.story-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.4rem;
+  transition: opacity 0.15s;
+}
+
+.story-meta {
+  font-size: 0.75rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
 }
 
 .body p + p { margin-top: 1.1em; }
