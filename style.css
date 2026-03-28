@@ -138,16 +138,16 @@ h1 {
   display: block;
 }
 
-.story-title {
-  font-size: 1.2rem;
-  margin-bottom: 0.4rem;
-  transition: opacity 0.15s;
-}
-
 .story-meta {
   font-size: 0.75rem;
   letter-spacing: 0.06em;
   text-transform: uppercase;
+  margin-bottom: 0.4rem;
+}
+
+.story-title {
+  font-size: 1.2rem;
+  transition: opacity 0.15s;
 }
 
 .body p + p { margin-top: 1.1em; }
