@@ -157,3 +157,28 @@ h1 {
   display: block;
   margin: 2em 0;
 }
+
+/* ── Songs list ── */
+.songs-list { list-style: none; }
+
+.song-item {
+  border-bottom: 1px solid #a0a6b2;
+  padding: 1.8rem 0;
+}
+
+.song-item:first-child { border-top: 1px solid #a0a6b2; }
+
+.song-title {
+  font-size: 1.2rem;
+  margin-bottom: 0.25rem;
+}
+
+.song-note {
+  font-size: 0.9rem;
+  color: #8b96b0;
+  margin-bottom: 1rem;
+}
+
+.song-player {
+  width: 100%;
+}
